@@ -1,7 +1,8 @@
 #Firebase_chat_app
 
 #using 
-fireAuth to login by email and password <\n>
+</n>fireAuth to login by email and password </n>
+
 fireStore
 
 
