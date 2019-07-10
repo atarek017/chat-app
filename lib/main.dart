@@ -1,8 +1,11 @@
+import 'package:chat_app/src/pages/chat.dart';
 import 'package:chat_app/src/pages/regest.dart';
 import 'package:chat_app/src/pages/sign_in.dart';
 import 'package:chat_app/src/pages/widgets/custom_utton.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 void main() => runApp(MyApp());
 
@@ -45,30 +48,59 @@ class MyHomePage extends StatelessWidget {
               ),
             ],
           ),
-
           SizedBox(
             height: 50,
           ),
-
           CustomButton(
             text: "Log IN",
             callback: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) =>SignIn()),);
-
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignIn()),
+              );
             },
           ),
-
           SizedBox(
             height: 15,
           ),
-
           CustomButton(
             text: "Regiest",
             callback: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) =>Regiest()),);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Regiest()),
+              );
             },
           ),
+          SizedBox(
+            height: 15,
+          ),
+          CustomButton(
+            text: "Google Sign in",
+            callback: () async {
+              final GoogleSignIn _googleSignIn = GoogleSignIn();
+              final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+              final GoogleSignInAccount account = await _googleSignIn.signIn();
+              final GoogleSignInAuthentication _auth =
+                  await account.authentication;
+              final AuthCredential credential =
+                  GoogleAuthProvider.getCredential(
+                      accessToken: _auth.accessToken, idToken: _auth.idToken);
+              await _firebaseAuth
+                  .signInWithCredential(credential)
+                  .then((onValue) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Chat(
+                          user: onValue,
+                        ),
+                  ),
+                );
+              });
+            },
+          ),
         ],
       ),
     );
