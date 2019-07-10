@@ -1,16 +1,14 @@
-# chat_app
+# Firebase_chat_app
 
-A new Flutter application.
+# Using :
+</n>fireAuth to login by email and password </n>
 
-## Getting Started
+fireStore
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+![c1](https://user-images.githubusercontent.com/26245770/60814212-7ebc9d00-a195-11e9-9088-77c883a54db7.PNG)
+![c2](https://user-images.githubusercontent.com/26245770/60814213-7ebc9d00-a195-11e9-89eb-d788ee8a9095.PNG)
+![c3](https://user-images.githubusercontent.com/26245770/60814214-7ebc9d00-a195-11e9-9b5e-bdf1debcb58c.PNG)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+
