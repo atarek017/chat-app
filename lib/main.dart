@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 void main() => runApp(MyApp());
 
@@ -77,32 +78,78 @@ class MyHomePage extends StatelessWidget {
           ),
           CustomButton(
             text: "Google Sign in",
+            callback: () {
+              signInGoogle(context);
+            },
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          CustomButton(
+            text: "FaceBook Sign in",
             callback: () async {
-              final GoogleSignIn _googleSignIn = GoogleSignIn();
-              final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
-              final GoogleSignInAccount account = await _googleSignIn.signIn();
-              final GoogleSignInAuthentication _auth =
-                  await account.authentication;
-              final AuthCredential credential =
-                  GoogleAuthProvider.getCredential(
-                      accessToken: _auth.accessToken, idToken: _auth.idToken);
-              await _firebaseAuth
-                  .signInWithCredential(credential)
-                  .then((onValue) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Chat(
-                          user: onValue,
-                        ),
-                  ),
-                );
-              });
+              await signInFacebook(context);
             },
           ),
         ],
       ),
     );
+  }
+
+  void signInGoogle(context) async {
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+    final GoogleSignInAccount account = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication _auth = await account.authentication;
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: _auth.accessToken, idToken: _auth.idToken);
+    await _firebaseAuth.signInWithCredential(credential).then((onValue) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Chat(
+                user: onValue,
+              ),
+        ),
+      );
+    });
+  }
+
+  Future<Null> signInFacebook(context) async {
+    final FacebookLogin facebookSignIn = new FacebookLogin();
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+    final FacebookLoginResult result =
+        await facebookSignIn.logInWithReadPermissions(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final FacebookAccessToken accessToken = result.accessToken;
+
+        final AuthCredential credential =
+            FacebookAuthProvider.getCredential(accessToken: accessToken.token);
+
+        await _firebaseAuth.signInWithCredential(credential).then((onValue) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Chat(
+                    user: onValue,
+                  ),
+            ),
+          );
+        }).catchError((onError) {
+          print(onError);
+        });
+
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        print('Login cancelled by the user.');
+        break;
+      case FacebookLoginStatus.error:
+        print('Something went wrong with the login process.\n'
+            'Here\'s the error Facebook gave us: ${result.errorMessage}');
+        break;
+    }
   }
 }
