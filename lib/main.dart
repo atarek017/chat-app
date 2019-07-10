@@ -110,6 +110,7 @@ class MyHomePage extends StatelessWidget {
         MaterialPageRoute(
           builder: (context) => Chat(
                 user: onValue,
+                accountType: 'google',
               ),
         ),
       );
@@ -135,6 +136,7 @@ class MyHomePage extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => Chat(
                     user: onValue,
+                    accountType: 'facebook',
                   ),
             ),
           );

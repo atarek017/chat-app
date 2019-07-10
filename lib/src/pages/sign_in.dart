@@ -25,6 +25,7 @@ class _SignInStat extends State<SignIn> {
         MaterialPageRoute(
             builder: (context) => Chat(
                   user: value,
+              accountType: 'email',
                 )),
       );
     }).catchError((onError) {

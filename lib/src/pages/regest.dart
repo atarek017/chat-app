@@ -20,20 +20,17 @@ class _RegiestStat extends State<Regiest> {
     FirebaseUser user = await _auth
         .createUserWithEmailAndPassword(email: email, password: pass)
         .then((onValue) {
-
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => Chat(
-              user: onValue,
-            )),
+                  user: onValue,
+                  accountType: 'email',
+                )),
       );
-
-    })
-        .catchError((onError) {
+    }).catchError((onError) {
       print(onError);
     });
-
   }
 
   @override
